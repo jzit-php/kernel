@@ -16,6 +16,7 @@ class Kernel implements KernelInterface
 {
     protected const SERVICE_PROVIDERS_FILE_NAME = 'service_providers.php';
     protected const APP_DIRECTORY_NAME = 'app';
+    protected const SRC_DIRECTORY_NAME = 'src';
 
     /**
      * @var \Di\Container
@@ -35,6 +36,11 @@ class Kernel implements KernelInterface
     /**
      * @var string
      */
+    protected $srcDir;
+
+    /**
+     * @var string
+     */
     protected $environment;
 
     /**
@@ -50,6 +56,7 @@ class Kernel implements KernelInterface
     {
         $this->rootDir = \rtrim($rootDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->appDir = $this->rootDir . static::APP_DIRECTORY_NAME . DIRECTORY_SEPARATOR;
+        $this->srcDir = $this->rootDir . static::SRC_DIRECTORY_NAME . DIRECTORY_SEPARATOR;
 
         $this->environment = $this->setEnvironment();
         $this->container = $this->setupContainer($this->createContainer($useAutowiring, $useAnnotations));
@@ -107,6 +114,7 @@ class Kernel implements KernelInterface
     protected function setupContainer(Container $container): Container
     {
         $container->set('app_dir', $this->appDir);
+        $container->set('src_dir', $this->srcDir);
         $container->set('environment', $this->environment);
 
         foreach ($this->registerServiceProviders() as $serviceProvider) {
